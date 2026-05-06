@@ -1,5 +1,5 @@
 @echo off
-title AISD SysAdminTool v1
+title AISD SysAdminTool v1.1
 net session >nul 2>&1
 if %ERRORLEVEL% neq 0 (
     color 04
@@ -58,7 +58,7 @@ rem Term Agreement -----------------------------------------------------------
      powershell Write-Host '  - Minimum: Windows 10 22H2' -ForegroundColor red
      powershell Write-Host '  - Recommended: Windows 11 23H2 or later' -ForegroundColor DarkGreen
      echo.
-     echo  Build Version: v1.0 Lite
+     echo  Build Version: v1.1
      echo  Created By: TXDYLAN
      echo.
      powershell Write-Host -NoNewline ' Please reference ' -ForegroundColor White
@@ -249,218 +249,260 @@ rem Term Agreement -----------------------------------------------------------
              start ms-settings:workplace
              goto intune
      rem Online Installs ----------------------------------------------------------
-         :msstore
-         cls
-         color 0f
-         powershell Write-Host ' Software Installs:' -ForegroundColor Blue
-         echo.
-         echo   [0] Back
-         echo   [A] Adobe Acrobat PDF Reader
-         echo   [C] Adobe Creative Cloud - Adobe Suite
-         echo   [G] GitBash
-         echo   [I] IPEVO Visualizer App
-         echo   [1] Microsoft Company Portal App
-         echo   [2] Microsoft Office 365 Suit
-         echo   [3] Microsoft Outlook App
-         echo   [4] Microsoft PC Manager
-         echo   [5] Microsoft PowerToys
-         echo   [6] Microsoft Quick Assist
-         echo   [7] Microsoft Surface App
-         echo   [T] Microsoft Teams
-         echo   [D] Microsoft Wireless Display Adapter App
-         echo   [8] Microsoft Whiteboard App
-         echo   [9] Minecraft Education
-         echo   [L] Logitech Unifying Software
-         echo   [U] Update - Will Update all Applications
-         echo   [V] VLC Player App
-         echo   [P] Third Party Installs
-         echo.
-         choice /c 0ACGI1234567TD89LUVP /n /m ":~$"
-         if %errorlevel%==1 goto selection
-         if %errorlevel%==2 goto aar
-         if %errorlevel%==3 goto acc
-         if %errorlevel%==4 goto gitbash
-         if %errorlevel%==5 goto ipevo
-         if %errorlevel%==6 goto mscp
-         if %errorlevel%==7 goto office365
-         if %errorlevel%==8 goto outlook
-         if %errorlevel%==9 goto pcmanager
-         if %errorlevel%==10 goto powertoys
-         if %errorlevel%==11 goto quickassist
-         if %errorlevel%==12 goto surface
-         if %errorlevel%==13 goto teams
-         if %errorlevel%==14 goto wd
-         if %errorlevel%==15 goto mswhiteboard
-         if %errorlevel%==16 goto minecraftedu
-         if %errorlevel%==17 goto unifying
-         if %errorlevel%==18 goto msupdate
-         if %errorlevel%==19 goto vlc
-         if %errorlevel%==20 goto 3pi
-         rem Adobe Acrobat Reader DC --------------------------------------------------
-             :aar
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install XPDP273C0XHQH2
-             echo Task Completed.
-             pause > nul
-             goto msstore 
-         rem Adobe Creative Cloud -----------------------------------------------------
-             :acc
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Adobe.CreativeCloud
-             echo Task Completed.
-             pause > nul
-             goto msstore 
-         rem GitBash ------------------------------------------------------------------
-             :gitbash
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Git.Git
-             echo Task Completed.
-             pause > nul
-             goto msstore 
-         rem IPEVO Visualizer App -----------------------------------------------------
-             :ipevo
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 79PFXWFL0PB4S
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Company Portal App ---------------------------------------------
-             :mscp
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJ3PZ
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Office 365 Suit ------------------------------------------------
-             :office365
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Microsoft.Office
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Outlook App ----------------------------------------------------
-             :outlook
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9NRX63209R7B
-             echo Task Completed
-             pause > nul
-             goto msstore
-         rem Microsoft PC Manager -----------------------------------------------------
-             :pcmanager
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9PM860492SZD
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft PowerToys ------------------------------------------------------
-             :powertoys
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Microsoft.PowerToys
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Quick Assist ---------------------------------------------------
-             :quickassist
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9P7BP5VNWKX5
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Surface App ----------------------------------------------------
-             :surface
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJB8P
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Teams ----------------------------------------------------------
-             :teams
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Microsoft.Teams
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Wireless Display Adapter App -----------------------------------
-             :wd
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJBB1
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Microsoft Whiteboard App -------------------------------------------------
-             :mswhiteboard
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9MSPC6MP8FM4
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Minecraft Education ------------------------------------------------------
-             :minecraftedu
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9NBLGGH4R2R6
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Logitech Unifying Software -----------------------------------------------
-             :unifying
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Logitech.UnifyingSoftware
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Update -------------------------------------------------------------------
-             :msupdate
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" update --all --include-unknown --accept-source-agreements --accept-package-agreements
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem VLC Player App -----------------------------------------------------------
-             :vlc
-             "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install XPDM1ZW6815MQM
-             echo Task Completed.
-             pause > nul
-             goto msstore
-         rem Third Party Installs -----------------------------------------------------
-             :3pi
+         rem MSstore ------------------------------------------------------------------
+             :msstore
              cls
-             powershell Write-Host 'Third Party Installs:' -ForegroundColor Blue
-             powershell Write-Host '!!Install Chocolatey first if you have not already!!' -ForegroundColor Yellow
+             color 0f
+             powershell Write-Host ' Software Installs:' -ForegroundColor Blue
+             echo.
+             powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
              echo.
              echo   [0] Back
-             echo   [C] Chocolatey Package Manager
-             echo   [1] Dell Support Assist
-             echo   [2] HP Support Assist
-             echo   [3] Mitel Connect
-             echo   [4] Vexcode V5
+             echo   [1] Adobe Acrobat PDF Reader
+             echo   [2] Adobe Creative Cloud - Adobe Suite
+             echo   [3] AVer Touch App 
+             echo   [4] Dell Display And Peripheral Manager
+             echo   [5] Dell Support Assist 
+             echo   [6] GitBash
+             echo   [7] IPEVO Visualizer App
+             echo   [8] Logitech Unifying Software
+             echo   [9] Minecraft Education
+             echo   [U] Update - Will Update all Applications
+             echo   [V] VLC Player App
              echo.
-             choice /c 0C1234 /n /m ":~$"
-             if %errorlevel%==1 goto msstore
-             if %errorlevel%==2 goto 3piinstall
-             if %errorlevel%==3 goto dellsupport
-             if %errorlevel%==4 goto hpsupport
-             if %errorlevel%==5 goto mitel
-             if %errorlevel%==6 goto vex5
-             rem Chocolatey Package Installer ---------------------------------------------
-                 :3piinstall
-                 cls
-                 echo Are you sure you want to install Chocolatey?
-                 echo   [Y]Yes/[N]No
-                 echo.
-                 choice /c YN /n /m ":~$"
-                 if %errorlevel%==1 goto 3piinstallyes
-                 if %errorlevel%==2 goto 3pi
-                 rem Connect Yes --------------------------------------------------------------
-                     :3piinstallyes
-                     powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-                     goto 3pi
+             choice /c 0D123456789UV /n /m ":~$"
+             if %errorlevel%==1 goto selection
+             if %errorlevel%==2 goto msstore2
+             if %errorlevel%==3 goto aar
+             if %errorlevel%==4 goto acc
+             if %errorlevel%==5 goto aver
+             if %errorlevel%==6 goto delldpm
+             if %errorlevel%==7 goto dellsa
+             if %errorlevel%==8 goto gitbash
+             if %errorlevel%==9 goto ipevo
+             if %errorlevel%==10 goto unifying
+             if %errorlevel%==11 goto minecraftedu
+             if %errorlevel%==12 goto msupdate
+             if %errorlevel%==13 goto vlc
+             rem Adobe Acrobat Reader DC --------------------------------------------------
+                 :aar
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install XPDP273C0XHQH2
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore 
+             rem Adobe Creative Cloud -----------------------------------------------------
+                 :acc
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Adobe.CreativeCloud
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore 
+             rem AVer Touch ---------------------------------------------------------------
+                 :aver
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9PNKDR50694P
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore 
+             rem Dell Display & Peripheral Manager ----------------------------------------
+                 :delldpm
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Dell.DisplayAndPeripheralManager
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore    
              rem Dell Support Assist ------------------------------------------------------
-                 :dellsupport
-                 %ProgramData%\chocolatey\bin\choco.exe" install supportassist -y --no-progress
+                 :dellsa
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install XPDCCXDN26VNBT
                  echo Task Completed.
                  pause > nul
-                 goto 3pi
-             rem HP Support Assist --------------------------------------------------------
-                 :hpsupport
-                 %ProgramData%\chocolatey\bin\choco.exe" install hpsupportassistant -y --no-progress
+                 goto msstore 
+             rem GitBash ------------------------------------------------------------------
+                 :gitbash
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Git.Git
                  echo Task Completed.
                  pause > nul
-                 goto 3pi
-             rem Mitel Connect ------------------------------------------------------------
-                 :mitel
-                 %ProgramData%\chocolatey\bin\choco.exe" install MitelConnect -y --no-progress
+                 goto msstore 
+             rem IPEVO Visualizer App -----------------------------------------------------
+                 :ipevo
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 79PFXWFL0PB4S
                  echo Task Completed.
                  pause > nul
-                 goto 3pi
-             rem Vexcode V5 ---------------------------------------------------------------
-                 :vex5
-                 %ProgramData%\chocolatey\bin\choco.exe" install vexcode -y --no-progress
+                 goto msstore
+             rem Logitech Unifying Software -----------------------------------------------
+                 :unifying
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Logitech.UnifyingSoftware
                  echo Task Completed.
                  pause > nul
-                 goto 3pi
+                 goto msstore              
+             rem Minecraft Education ------------------------------------------------------
+                 :minecraftedu
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9NBLGGH4R2R6
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore
+             rem Update -------------------------------------------------------------------
+                 :msupdate
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" update --all --include-unknown --accept-source-agreements --accept-package-agreements
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore
+             rem VLC Player App -----------------------------------------------------------
+                 :vlc
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install XPDM1ZW6815MQM
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore
+         rem MSstore2 -----------------------------------------------------------------
+            :msstore2
+             cls
+             color 0f
+             powershell Write-Host ' Software Installs:' -ForegroundColor Blue
+             echo.
+             powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
+             echo.
+             echo   [0] Back
+             echo   [1] Microsoft Company Portal App
+             echo   [2] Microsoft Office 365 Suit
+             echo   [3] Microsoft Outlook App
+             echo   [4] Microsoft PC Manager
+             echo   [5] Microsoft PowerToys
+             echo   [6] Microsoft Quick Assist
+             echo   [7] Microsoft Surface App
+             echo   [T] Microsoft Teams
+             echo   [8] Microsoft Wireless Display Adapter App
+             echo   [9] Microsoft Whiteboard App
+             echo   [P] Third Party Installs
+             echo.
+             choice /c 0AD1234567T89P /n /m ":~$"
+             if %errorlevel%==1 goto selection
+             if %errorlevel%==2 goto msstore
+             if %errorlevel%==3 goto msstore2
+             if %errorlevel%==4 goto mscp
+             if %errorlevel%==5 goto office365
+             if %errorlevel%==6 goto outlook
+             if %errorlevel%==7 goto pcmanager
+             if %errorlevel%==8 goto powertoys
+             if %errorlevel%==9 goto quickassist
+             if %errorlevel%==10 goto surface
+             if %errorlevel%==11 goto teams
+             if %errorlevel%==12 goto wd
+             if %errorlevel%==13 goto mswhiteboard
+             if %errorlevel%==14 goto 3pi
+             rem Microsoft Company Portal App ---------------------------------------------
+                 :mscp
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJ3PZ
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Office 365 Suit ------------------------------------------------
+                 :office365
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Microsoft.Office
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Outlook App ----------------------------------------------------
+                 :outlook
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9NRX63209R7B
+                 echo Task Completed
+                 pause > nul
+                 goto msstore2
+             rem Microsoft PC Manager -----------------------------------------------------
+                 :pcmanager
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9PM860492SZD
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft PowerToys ------------------------------------------------------
+                 :powertoys
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Microsoft.PowerToys
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Quick Assist ---------------------------------------------------
+                 :quickassist
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9P7BP5VNWKX5
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Surface App ----------------------------------------------------
+                 :surface
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJB8P
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Teams ----------------------------------------------------------
+                 :teams
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Microsoft.Teams
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Wireless Display Adapter App -----------------------------------
+                 :wd
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJBB1
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Microsoft Whiteboard App -------------------------------------------------
+                 :mswhiteboard
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9MSPC6MP8FM4
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
+             rem Third Party Installs -----------------------------------------------------
+                 :3pi
+                 cls
+                 powershell Write-Host 'Third Party Installs:' -ForegroundColor Blue
+                 powershell Write-Host '!!Install Chocolatey first if you have not already!!' -ForegroundColor Yellow
+                 echo.
+                 echo   [0] Back
+                 echo   [C] Chocolatey Package Manager
+                 echo   [1] Dell Support Assist
+                 echo   [2] HP Support Assist
+                 echo   [3] Mitel Connect
+                 echo   [4] Vexcode V5
+                 echo.
+                 choice /c 0C1234 /n /m ":~$"
+                 if %errorlevel%==1 goto msstore
+                 if %errorlevel%==2 goto 3piinstall
+                 if %errorlevel%==3 goto dellsupport
+                 if %errorlevel%==4 goto hpsupport
+                 if %errorlevel%==5 goto mitel
+                 if %errorlevel%==6 goto vex5
+                 rem Chocolatey Package Installer ---------------------------------------------
+                     :3piinstall
+                     cls
+                     echo Are you sure you want to install Chocolatey?
+                     echo   [Y]Yes/[N]No
+                     echo.
+                     choice /c YN /n /m ":~$"
+                     if %errorlevel%==1 goto 3piinstallyes
+                     if %errorlevel%==2 goto 3pi
+                     rem Connect Yes --------------------------------------------------------------
+                         :3piinstallyes
+                         powershell Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+                         goto 3pi
+                 rem Dell Support Assist ------------------------------------------------------
+                     :dellsupport
+                     %ProgramData%\chocolatey\bin\choco.exe" install supportassist -y --no-progress
+                     echo Task Completed.
+                     pause > nul
+                     goto 3pi
+                 rem HP Support Assist --------------------------------------------------------
+                     :hpsupport
+                     %ProgramData%\chocolatey\bin\choco.exe" install hpsupportassistant -y --no-progress
+                     echo Task Completed.
+                     pause > nul
+                     goto 3pi
+                 rem Mitel Connect ------------------------------------------------------------
+                     :mitel
+                     %ProgramData%\chocolatey\bin\choco.exe" install MitelConnect -y --no-progress
+                     echo Task Completed.
+                     pause > nul
+                     goto 3pi
+                 rem Vexcode V5 ---------------------------------------------------------------
+                     :vex5
+                     %ProgramData%\chocolatey\bin\choco.exe" install vexcode -y --no-progress
+                     echo Task Completed.
+                     pause > nul
+                     goto 3pi                 
      rem System Information -------------------------------------------------------
          :wininfo
          cls
