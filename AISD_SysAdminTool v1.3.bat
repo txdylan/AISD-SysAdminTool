@@ -1,10 +1,8 @@
 @echo off
-title AISD SysAdminTool v1.1
+title AISD SysAdminTool v1.3
 net session >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    color 04
-    echo [ERROR] Please run this script as Administrator!
-    pause > nul
+if %errorLevel% neq 0 (
+    powershell -Command "Start-Process '%~f0' -Verb RunAs"
     exit /b
 )
 rem Term Agreement -----------------------------------------------------------
@@ -58,7 +56,7 @@ rem Term Agreement -----------------------------------------------------------
      powershell Write-Host '  - Minimum: Windows 10 22H2' -ForegroundColor red
      powershell Write-Host '  - Recommended: Windows 11 23H2 or later' -ForegroundColor DarkGreen
      echo.
-     echo  Build Version: v1.1
+     echo  Build Version: v1.3
      echo  Created By: TXDYLAN
      echo.
      powershell Write-Host -NoNewline ' Please reference ' -ForegroundColor White
@@ -76,128 +74,19 @@ rem Term Agreement -----------------------------------------------------------
      powershell Write-Host ' Main Menu' -ForegroundColor Blue
      echo.
      echo   [0] Exit
-     echo   [1] Domain Tools - For Domain Joined Devices
-     echo   [2] Intune Commands
-     echo   [3] Online Installs
-     echo   [4] System Information
-     echo   [5] Windows Commands
+     echo   [1] Intune Commands
+     echo   [2] Online Installs
+     echo   [3] System Information
+     echo   [4] Windows Commands
+     echo   [5] Other
      echo.
      choice /c 012345 /n /m ":~$"
      if %errorlevel%==1 goto end
-     if %errorlevel%==2 goto domain
-     if %errorlevel%==3 goto intune
-     if %errorlevel%==4 goto msstore
-     if %errorlevel%==5 goto wininfo
-     if %errorlevel%==6 goto wincommand
-     rem Domain Tools -------------------------------------------------------------
-         :domain
-         cls
-         color 0f
-         powershell Write-Host ' Domain Tools is selected.' -ForegroundColor Blue
-         echo.
-         echo   [0] Back
-         echo   [1] Message - Send messages to machines
-         echo   [2] Remote Power - Restart or power down a computer remotely
-         echo.
-         choice /c 012 /n /m ":~$"
-         if %errorlevel%==1 goto Selection
-         if %errorlevel%==2 goto choosetarget
-         if %errorlevel%==3 goto rmpower
-         rem Send Message -------------------------------------------------------------
-             :choosetarget
-             cls
-             setlocal enabledelayedexpansion
-             color 0f
-             powershell Write-Host ' LAN Messenger - Choose Host' -ForegroundColor Blue
-             echo.
-             set /p target=Enter target computer name or IP (or type "exit" to exit): 
-             if /i "%target%"=="exit" goto domain
-             if "%target%"=="" (
-             powershell Write-Host ' You must enter a target.' -ForegroundColor Red
-             timeout /t 2 >nul
-             goto choosetarget
-             )
-             :chatMode
-             cls
-             powershell Write-Host ' Sending messages to: %target%' -ForegroundColor Blue
-             echo.
-             echo  Type "/change" to pick another host, "/exit" to exit.
-             echo.
-             :inputLoop
-             set /p msg=Message: 
-             if /i "!msg!"=="/exit" goto domain
-             if /i "!msg!"=="/change" goto choosetarget
-             if "!msg!"=="" goto inputLoop
-             REM Send to all sessions on target. Replace * with a username if desired.
-             msg /SERVER:%target% * "!msg!" 2>nul
-             if errorlevel 1 (
-             echo.
-             powershell Write-Host ' Failed to send message. Common causes:' -ForegroundColor Red
-             echo  - target unreachable, wrong name/IP
-             echo  - port 445 blocked or Server service disabled on target
-             echo  - permission/UAC/domain issues (admin credentials needed)
-             echo.
-             echo Press any key to continue...
-             pause >nul
-             )
-             goto inputLoop
-         rem Remote Power Options -----------------------------------------------------
-             :rmpower
-             cls
-             setlocal enabledelayedexpansion
-             color 0f
-             powershell Write-Host ' Remote Power - Choose Host' -ForegroundColor Blue
-             echo.
-             set /p target=Enter target computer name or IP (or type "exit" to exit): 
-             if /i "%target%"=="exit" goto domain
-             if "%target%"=="" (
-             powershell Write-Host ' You must enter a target.' -ForegroundColor Red
-             timeout /t 2 >nul
-             goto rmpower
-             )
-             cls
-             powershell Write-Host ' Remote Power Menu - Computer: %TARGET%' -ForegroundColor Blue
-             echo.
-             echo   [0] Back
-             echo   [1] Restart immediately
-             echo   [2] Shutdown immediately
-             echo   [3] Schedule restart (ask seconds)
-             echo   [4] Abort pending shutdown/restart
-             echo   [5] Display shutdown help on target (test connectivity)
-             echo.
-             choice /c 012345 /n /m ":~$"
-             if %errorlevel%==1 goto rmpower
-             if %errorlevel%==2 goto restart
-             if %errorlevel%==3 goto shutdown
-             if %errorlevel%==4 goto scheduled
-             if %errorlevel%==5 goto abort
-             if %errorlevel%==6 goto helpcheck
-             :restart
-             echo Restarting %TARGET% now...
-             shutdown /m \\%TARGET% /r /t 0 /f
-             goto rmpower
-             :shutdown
-             echo Shutting down %TARGET% now...
-             shutdown /m \\%TARGET% /s /t 0 /f
-             goto rmpower
-             :scheduled
-             set /p sec=Enter delay in seconds before restart (e.g. 60):
-             if "%sec%"=="" set sec=60
-             echo Scheduling restart on %TARGET% in %sec% seconds...
-             shutdown /m \\%TARGET% /r /t %sec% /c "Scheduled by RemotePowerMenu" /f
-             goto rmpower
-             :abort
-             echo Sending abort to %TARGET%...
-             shutdown /m \\%TARGET% /a
-             goto rmpower
-             :helpcheck
-             echo Running "shutdown /?" locally to show syntax...
-             shutdown /?
-             echo.
-             echo Checking basic connectivity to \\%TARGET%...
-             ping -n 2 %TARGET%
-             echo If ping fails, remote commands will likely fail.
-             goto rmpower
+     if %errorlevel%==2 goto intune
+     if %errorlevel%==3 goto msstore
+     if %errorlevel%==4 goto wininfo
+     if %errorlevel%==5 goto wincommand
+     if %errorlevel%==6 goto other 
      rem Intune -------------------------------------------------------------------
          :intune
          cls
@@ -253,7 +142,7 @@ rem Term Agreement -----------------------------------------------------------
              :msstore
              cls
              color 0f
-             powershell Write-Host ' Software Installs:' -ForegroundColor Blue
+             powershell Write-Host ' Software Installs: (Page 1 of 2)' -ForegroundColor Blue
              echo.
              powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
              echo.
@@ -351,10 +240,10 @@ rem Term Agreement -----------------------------------------------------------
                  pause > nul
                  goto msstore
          rem MSstore2 -----------------------------------------------------------------
-            :msstore2
+             :msstore2
              cls
              color 0f
-             powershell Write-Host ' Software Installs:' -ForegroundColor Blue
+             powershell Write-Host ' Software Installs: (Page 2 of 2)' -ForegroundColor Blue
              echo.
              powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
              echo.
@@ -521,26 +410,34 @@ rem Term Agreement -----------------------------------------------------------
              powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
              echo.
              echo   [0] Back
-             echo   [1] Bitlocker Info - System Bitlocker Code
-             echo   [2] Delete Profiles - Shortcut to remove user profiles
-             echo   [3] Device Manager - Admin Shortcut
-             echo   [4] Network Reset - System Network Repair
-             echo   [5] Rename - Rename The Computer System
-             echo   [6] System Clean - Deletes System Temporary Files
-             echo   [7] Time Sync - Sync System Clock
-             echo   [8] Verbo - Enables System Messages During Boot         
+             echo   [1] Classic Device and Printers - Control Panel Management
+             echo   [2] Bitlocker Info - System Bitlocker Code
+             echo   [3] Delete Profiles - Shortcut to remove user profiles
+             echo   [4] Device Manager - Admin Shortcut
+             echo   [5] Network Reset - System Network Repair
+             echo   [6] Perfomance Monitor Report
+             echo   [7] Perfomance Monitor Resources
+             echo   [8] Rename - Rename The Computer System
+             echo   [9] System Clean - Deletes System Temporary Files         
              echo.
-             choice /c 0D12345678R9 /n /m ":~$"
+             choice /c 0AD123456789E /n /m ":~$"
              if %errorlevel%==1 goto selection
-             if %errorlevel%==2 goto wincommand2
-             if %errorlevel%==3 goto commandbitlockercode
-             if %errorlevel%==4 goto commandprofile
-             if %errorlevel%==5 goto commanddevmgmt
-             if %errorlevel%==6 goto commandnet
-             if %errorlevel%==7 goto commandrename
-             if %errorlevel%==8 goto commandclean
-             if %errorlevel%==9 goto commandtime
-             if %errorlevel%==10 goto commandverbo
+             if %errorlevel%==2 goto wincommand
+             if %errorlevel%==3 goto wincommand2
+             if %errorlevel%==4 goto mcdp
+             if %errorlevel%==5 goto commandbitlockercode
+             if %errorlevel%==6 goto commandprofile
+             if %errorlevel%==7 goto commanddevmgmt
+             if %errorlevel%==8 goto commandnet
+             if %errorlevel%==9 goto pmreport
+             if %errorlevel%==10 goto pmres
+             if %errorlevel%==11 goto commandrename
+             if %errorlevel%==12 goto commandclean
+             if %errorlevel%==13 goto medge
+             rem Classic Device and Printers ----------------------------------------------
+                 :mcdp
+                 C:\Windows\explorer.exe shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}
+                 goto wincommand
              rem Bitlocker Info -----------------------------------------------------------
                  :commandbitlockercode
                  %SystemRoot%\System32\manage-bde.exe -status
@@ -565,6 +462,14 @@ rem Term Agreement -----------------------------------------------------------
                  start "" "https://www.msftconnecttest.com/redirect"
                  echo Task Completed.
                  pause > nul
+                 goto wincommand
+             rem Perfomance Monitor Report ------------------------------------------------
+                 :pmreport
+                 powershell perfmon /report
+                 goto wincommand
+             rem Perfomance Monitor Resources ---------------------------------------------
+                 :pmres
+                 powershell perfmon /res
                  goto wincommand
              rem Rename PC ----------------------------------------------------------------
                  :commandrename
@@ -606,19 +511,9 @@ rem Term Agreement -----------------------------------------------------------
                  echo Task Completed.
                  pause > nul
                  goto wincommand
-             rem Time Sync ----------------------------------------------------------------
-                 :commandtime
-                 %SystemRoot%\System32\net.exe start w32time >nul 2>&1
-                 timeout /t 10
-                 %SystemRoot%\System32\w32tm.exe /resync >nul 2>&1
-                 echo Task Completed.
-                 pause > nul
-                 goto wincommand
-             rem Verbo --------------------------------------------------------------------
-                 :commandverbo
-                 %SystemRoot%\System32\reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v verbosestatus /t REG_DWORD /d 1 /f >nul 2>&1
-                 echo Task Completed.
-                 pause > nul
+             rem (Hidden) Microsoft Edge --------------------------------------------------
+                 :medge
+                 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
                  goto wincommand
          rem Command Page 2 -----------------------------------------------------------
                  :wincommand2
@@ -629,21 +524,35 @@ rem Term Agreement -----------------------------------------------------------
                  powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
                  echo.
                  echo   [0] Back
-                 echo   [1] Windows 11 Force Install
-                 echo   [2] Windows OS Repair - Restore and fixes Windows system files
-                 echo   [3] Windows Update Repair - Fixes issues with updating Windows       
+                 echo   [1] Time Sync - Sync System Clock
+                 echo   [2] Verbo - Enables System Messages During Boot
+                 echo   [3] Windows 11 Force Install
+                 echo   [4] Windows OS Repair - Restore and fixes Windows system files
+                 echo   [5] Windows Update Repair - Fixes issues with updating Windows       
                  echo.
-                 choice /c 0AD123 /n /m ":~$"
+                 choice /c 0AD12345 /n /m ":~$"
                  if %errorlevel%==1 goto selection
                  if %errorlevel%==2 goto wincommand
                  if %errorlevel%==3 goto wincommand2
-                 if %errorlevel%==4 goto win11u
-                 if %errorlevel%==5 goto commandwinrepair
-                 if %errorlevel%==6 goto commandwinupdate
-                 if %errorlevel%== goto 
-                 if %errorlevel%== goto 
-                 if %errorlevel%== goto 
-                 if %errorlevel%== goto 
+                 if %errorlevel%==4 goto commandtime
+                 if %errorlevel%==5 goto commandverbo
+                 if %errorlevel%==6 goto win11u
+                 if %errorlevel%==7 goto commandwinrepair
+                 if %errorlevel%==8 goto commandwinupdate
+                 rem Time Sync ----------------------------------------------------------------
+                 :commandtime
+                 %SystemRoot%\System32\net.exe start w32time >nul 2>&1
+                 timeout /t 10
+                 %SystemRoot%\System32\w32tm.exe /resync >nul 2>&1
+                 echo Task Completed.
+                 pause > nul
+                 goto wincommand22
+             rem Verbo --------------------------------------------------------------------
+                 :commandverbo
+                 %SystemRoot%\System32\reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v verbosestatus /t REG_DWORD /d 1 /f >nul 2>&1
+                 echo Task Completed.
+                 pause > nul
+                 goto wincommand2
              rem Windows 11 Force Install -------------------------------------------------
                  :win11u
                  d:
@@ -689,6 +598,304 @@ rem Term Agreement -----------------------------------------------------------
                  echo Task Completed.
                  pause > nul
                  goto wincommand2
+     rem Other --------------------------------------------------------------------
+         :other
+         cls
+         color 0f
+         powershell Write-Host ' Main Menu' -ForegroundColor Blue
+         echo.
+         echo   [0] Back
+         echo   [1] ChatGPT - Requires API Token
+         echo   [2] Domain Tools - For Domain Joined Devices
+         echo.
+         choice /c 012 /n /m ":~$"
+         if %errorlevel%==1 goto selection
+         if %errorlevel%==2 goto chatgpt
+         if %errorlevel%==3 goto domain
+         rem ChatGPT OpenAI -----------------------------------------------------------
+             :chatgpt
+             cls
+             cd /d "%~dp0"
+             set "ENV_FILE=%~dp0.env"
+             set "MODEL=gpt-5.6-luna"
+             set "API_URL=https://api.openai.com/v1/responses"
+             set "RESPONSE_FILE=%TEMP%\AskAI_%RANDOM%_%RANDOM%.response.json"
+             set "REQUEST_FILE=%TEMP%\AskAI_%RANDOM%_%RANDOM%.request.json"
+             echo.
+             echo  ================================================================
+             echo                             ChatGPT
+             echo  ================================================================
+             echo.
+             echo  Powered remotely by OpenAI
+             echo.
+             REM ----------------------------------------------------------------
+             REM Check required Windows tools
+             REM ----------------------------------------------------------------
+             where curl.exe >nul 2>&1
+             if errorlevel 1 (
+             powershell Write-Host ' [ERROR] curl.exe was not found.' -ForegroundColor red
+             echo.
+             echo  AskAI requires Windows 10 or Windows 11 with curl available.
+             echo.
+             pause > nul
+             goto other
+             )
+             where powershell.exe >nul 2>&1
+             if errorlevel 1 (
+             echo  [ERROR] Windows PowerShell was not found.
+             echo.
+             pause > nul
+             goto other
+             )
+             REM ----------------------------------------------------------------
+             REM Load OPENAI_API_KEY from .env
+             REM ----------------------------------------------------------------
+             if not exist "%ENV_FILE%" (
+             powershell Write-Host ' [SETUP REQUIRED]' -ForegroundColor red
+             echo.
+             echo  I could not find:
+             echo  %ENV_FILE%
+             echo.
+             echo  To set up OpenAI:
+             powershell Write-Host -NoNewline ' 1. Go to ' -ForegroundColor White
+             powershell Write-Host 'https://platform.openai.com/api-keys' -ForegroundColor Blue
+             echo  2. Sign in to OpenAI.
+             echo  3. Create an API key.
+             echo  4. Copy the key.
+             powershell Write-Host -NoNewline ' 5. Create a new file named ' -ForegroundColor White
+             powershell Write-Host '".env"' -ForegroundColor Yellow
+             echo  6. Open .env in Notepad
+             powershell Write-Host -NoNewline ' 7. Add the following line: ' -ForegroundColor White
+             powershell Write-Host '"OPENAI_API_KEY=sk-your-key-here"' -ForegroundColor Yellow
+             powershell Write-Host -NoNewline ' 8.  Replace ' -ForegroundColor White
+             powershell Write-Host -NoNewline '"sk-your-key-here" ' -ForegroundColor Yellow
+             powershell Write-Host 'with your actual API key' -ForegroundColor White
+             echo  9.  Save the .env file
+             echo.
+             powershell Write-Host ' Do NOT share your .env file!' -ForegroundColor red
+             pause > nul
+             goto other
+             )
+             set "OPENAI_API_KEY="
+             for /f "usebackq tokens=1,* delims==" %%A in ("%ENV_FILE%") do (
+             if /i "%%A"=="OPENAI_API_KEY" set "OPENAI_API_KEY=%%B"
+             )
+             if not defined OPENAI_API_KEY (
+             powershell Write-Host ' [ERROR] OPENAI_API_KEY was not found in .env.' -ForegroundColor red
+             echo.
+             echo  Your .env file should contain:
+             echo.
+             echo    OPENAI_API_KEY=sk-your-key-here
+             echo.
+             pause > nul
+             goto other
+             )
+             REM Remove optional surrounding double quotes.
+             if "%OPENAI_API_KEY:~0,1%"=="\"" if "%OPENAI_API_KEY:~-1%"=="\"" (
+             set "OPENAI_API_KEY=%OPENAI_API_KEY:~1,-1%"
+             )
+             powershell Write-Host ' [OK] Configuration loaded.' -ForegroundColor Green
+             echo.
+             echo  Model:
+             powershell Write-Host '  %MODEL%' -ForegroundColor Blue
+             echo.
+             echo  Type /help for commands.
+             echo  Type /exit to quit.
+             echo.
+             echo  ----------------------------------------------------------------
+             echo.
+             rem OpenAI Main --------------------------------------------------------------
+                 :openaimain
+                 set "USER_PROMPT="
+                 set /p "USER_PROMPT=:~$"
+                 if not defined USER_PROMPT goto main
+                 if /i "%USER_PROMPT%"=="/exit" goto openaicleanup
+                 if /i "%USER_PROMPT%"=="/quit" goto openaicleanup
+                 if /i "%USER_PROMPT%"=="/help" goto openaihelp
+                 if /i "%USER_PROMPT%"=="/clear" (
+                 cls
+                 goto openaimain
+                 )
+                 REM ----------------------------------------------------------------
+                 REM Build JSON directly in PowerShell.
+                 REM This avoids the previous prompt-file locking problem entirely.
+                 REM ----------------------------------------------------------------
+                 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
+                 "$body=@{model=$env:MODEL; input=$env:USER_PROMPT} | ConvertTo-Json -Compress; [IO.File]::WriteAllText($env:REQUEST_FILE,$body,[Text.UTF8Encoding]::new($false))"
+                 if errorlevel 1 (
+                 echo.
+                 powershell Write-Host ' [ERROR] Could not prepare the request.' -ForegroundColor red
+                 echo.
+                 goto openaimain
+                 )
+                 echo.
+                 echo  OpenAI: Thinking...
+                 curl.exe -sS --fail-with-body "%API_URL%" ^
+                 -H "Content-Type: application/json" ^
+                 -H "Authorization: Bearer %OPENAI_API_KEY%" ^
+                 --data-binary "@%REQUEST_FILE%" > "%RESPONSE_FILE%" 2>&1
+                 if errorlevel 1 (
+                 echo.
+                 powershell Write-Host ' [ERROR] The request could not be completed.' -ForegroundColor red
+                 echo.
+                 echo  Possible causes:
+                 echo    - No Internet connection
+                 echo    - Invalid or expired API key
+                 echo    - API account has no available billing/credits
+                 echo    - Temporary OpenAI service issue
+                 echo.
+                 echo  Server response:
+                 type "%RESPONSE_FILE%"
+                 echo.
+                 del "%REQUEST_FILE%" >nul 2>&1
+                 del "%RESPONSE_FILE%" >nul 2>&1
+                 goto openaimain
+                 )
+                 echo.
+                 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
+                 "$r=Get-Content -LiteralPath $env:RESPONSE_FILE -Raw | ConvertFrom-Json; if($r.error){Write-Host ('OpenAI error: '+$r.error.message); exit 2}; $printed=$false; foreach($item in $r.output){foreach($c in $item.content){if($c.type -eq 'output_text'){Write-Output $c.text; $printed=$true}}}; if(-not $printed){Write-Output 'No text response was returned.'}"
+                 echo.
+                 echo  ----------------------------------------------------------------
+                 echo.
+                 del "%REQUEST_FILE%" >nul 2>&1
+                 del "%RESPONSE_FILE%" >nul 2>&1
+                 goto openaimain
+             rem OpenAI Help --------------------------------------------------------------
+                 :openaihelp
+                 echo.
+                 echo  OpenAI commands:
+                 echo.
+                 echo    /help       Show this help
+                 echo    /clear      Clear the terminal
+                 echo    /exit       Close AskAI
+                 echo.
+                 echo  Type any normal question after ":~$".
+                 echo.
+                 echo  Your API key is read from .env in this folder.
+                 echo  Never share .env because it contains your private API key.
+                 echo.
+                 echo  ----------------------------------------------------------------
+                 echo.
+                 goto openaimain
+             rem Open AI close ------------------------------------------------------------
+                 :openaicleanup
+                 del "%REQUEST_FILE%" >nul 2>&1
+                 del "%RESPONSE_FILE%" >nul 2>&1
+                 echo.
+                 echo  Thanks for using OpenAI.
+                 echo.
+                 pause > nul
+                 endlocal
+                 goto other
+         rem Domain Tools -------------------------------------------------------------
+             :domain
+             cls
+             color 0f
+             powershell Write-Host ' Domain Tools is selected.' -ForegroundColor Blue
+             echo.
+             echo   [0] Back
+             echo   [1] Message - Send messages to machines
+             echo   [2] Remote Power - Restart or power down a computer remotely
+             echo.
+             choice /c 012 /n /m ":~$"
+             if %errorlevel%==1 goto other
+             if %errorlevel%==2 goto choosetarget
+             if %errorlevel%==3 goto rmpower
+             rem Send Message -------------------------------------------------------------
+                 :choosetarget
+                 cls
+                 setlocal enabledelayedexpansion
+                 color 0f
+                 powershell Write-Host ' LAN Messenger - Choose Host' -ForegroundColor Blue
+                 echo.
+                 set /p target=Enter target computer name or IP (or type "exit" to exit): 
+                 if /i "%target%"=="exit" goto domain
+                 if "%target%"=="" (
+                 powershell Write-Host ' You must enter a target.' -ForegroundColor Red
+                 timeout /t 2 >nul
+                 goto choosetarget
+                 )
+                 :chatMode
+                 cls
+                 powershell Write-Host ' Sending messages to: %target%' -ForegroundColor Blue
+                 echo.
+                 echo  Type "/change" to pick another host, "/exit" to exit.
+                 echo.
+                 :inputLoop
+                 set /p msg=Message: 
+                 if /i "!msg!"=="/exit" goto domain
+                 if /i "!msg!"=="/change" goto choosetarget
+                 if "!msg!"=="" goto inputLoop
+                 REM Send to all sessions on target. Replace * with a username if desired.
+                 msg /SERVER:%target% * "!msg!" 2>nul
+                 if errorlevel 1 (
+                 echo.
+                 powershell Write-Host ' Failed to send message. Common causes:' -ForegroundColor Red
+                 echo  - target unreachable, wrong name/IP
+                 echo  - port 445 blocked or Server service disabled on target
+                 echo  - permission/UAC/domain issues (admin credentials needed)
+                 echo.
+                 echo Press any key to continue...
+                 pause >nul
+                 )
+                 goto inputLoop
+             rem Remote Power Options -----------------------------------------------------
+                 :rmpower
+                 cls
+                 setlocal enabledelayedexpansion
+                 color 0f
+                 powershell Write-Host ' Remote Power - Choose Host' -ForegroundColor Blue
+                 echo.
+                 set /p target=Enter target computer name or IP (or type "exit" to exit): 
+                 if /i "%target%"=="exit" goto domain
+                 if "%target%"=="" (
+                 powershell Write-Host ' You must enter a target.' -ForegroundColor Red
+                 timeout /t 2 >nul
+                 goto rmpower
+                 )
+                 cls
+                 powershell Write-Host ' Remote Power Menu - Computer: %TARGET%' -ForegroundColor Blue
+                 echo.
+                 echo   [0] Back
+                 echo   [1] Restart immediately
+                 echo   [2] Shutdown immediately
+                 echo   [3] Schedule restart (ask seconds)
+                 echo   [4] Abort pending shutdown/restart
+                 echo   [5] Display shutdown help on target (test connectivity)
+                 echo.
+                 choice /c 012345 /n /m ":~$"
+                 if %errorlevel%==1 goto rmpower
+                 if %errorlevel%==2 goto restart
+                 if %errorlevel%==3 goto shutdown
+                 if %errorlevel%==4 goto scheduled
+                 if %errorlevel%==5 goto abort
+                 if %errorlevel%==6 goto helpcheck
+                 :restart
+                 echo Restarting %TARGET% now...
+                 shutdown /m \\%TARGET% /r /t 0 /f
+                 goto rmpower
+                 :shutdown
+                 echo Shutting down %TARGET% now...
+                 shutdown /m \\%TARGET% /s /t 0 /f
+                 goto rmpower
+                 :scheduled
+                 set /p sec=Enter delay in seconds before restart (e.g. 60):
+                 if "%sec%"=="" set sec=60
+                 echo Scheduling restart on %TARGET% in %sec% seconds...
+                 shutdown /m \\%TARGET% /r /t %sec% /c "Scheduled by RemotePowerMenu" /f
+                 goto rmpower
+                 :abort
+                 echo Sending abort to %TARGET%...
+                 shutdown /m \\%TARGET% /a
+                 goto rmpower
+                 :helpcheck
+                 echo Running "shutdown /?" locally to show syntax...
+                 shutdown /?
+                 echo.
+                 echo Checking basic connectivity to \\%TARGET%...
+                 ping -n 2 %TARGET%
+                 echo If ping fails, remote commands will likely fail.
+                 goto rmpower
  rem Security -----------------------------------------------------------------
      :ttsecurity
      cls
