@@ -1,5 +1,5 @@
 @echo off
-title AISD SysAdminTool v1.3
+title AISD SysAdminTool v1.4
 net session >nul 2>&1
 if %errorLevel% neq 0 (
     powershell -Command "Start-Process '%~f0' -Verb RunAs"
@@ -56,7 +56,7 @@ rem Term Agreement -----------------------------------------------------------
      powershell Write-Host '  - Minimum: Windows 10 22H2' -ForegroundColor red
      powershell Write-Host '  - Recommended: Windows 11 23H2 or later' -ForegroundColor DarkGreen
      echo.
-     echo  Build Version: v1.3
+     echo  Build Version: v1.4
      echo  Created By: TXDYLAN
      echo.
      powershell Write-Host -NoNewline ' Please reference ' -ForegroundColor White
@@ -142,7 +142,7 @@ rem Term Agreement -----------------------------------------------------------
              :msstore
              cls
              color 0f
-             powershell Write-Host ' Software Installs: (Page 1 of 2)' -ForegroundColor Blue
+             powershell Write-Host ' Software Installs: (Page 1 of 3)' -ForegroundColor Blue
              echo.
              powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
              echo.
@@ -150,12 +150,12 @@ rem Term Agreement -----------------------------------------------------------
              echo   [1] Adobe Acrobat PDF Reader
              echo   [2] Adobe Creative Cloud - Adobe Suite
              echo   [3] AVer Touch App 
-             echo   [4] Dell Display And Peripheral Manager
-             echo   [5] Dell Support Assist 
-             echo   [6] GitBash
-             echo   [7] IPEVO Visualizer App
-             echo   [8] Logitech Unifying Software
-             echo   [9] Minecraft Education
+             echo   [4] Dell Command Update
+             echo   [5] Dell Display And Peripheral Manager
+             echo   [6] Dell Support Assist
+             echo   [7] GitBash
+             echo   [8] IPEVO Visualizer App
+             echo   [9] Logitech Unifying Software
              echo   [U] Update - Will Update all Applications
              echo   [V] VLC Player App
              echo.
@@ -165,12 +165,12 @@ rem Term Agreement -----------------------------------------------------------
              if %errorlevel%==3 goto aar
              if %errorlevel%==4 goto acc
              if %errorlevel%==5 goto aver
-             if %errorlevel%==6 goto delldpm
-             if %errorlevel%==7 goto dellsa
-             if %errorlevel%==8 goto gitbash
-             if %errorlevel%==9 goto ipevo
-             if %errorlevel%==10 goto unifying
-             if %errorlevel%==11 goto minecraftedu
+             if %errorlevel%==6 goto dellcu          
+             if %errorlevel%==7 goto delldpm
+             if %errorlevel%==8 goto dellsa
+             if %errorlevel%==9 goto gitbash
+             if %errorlevel%==10 goto ipevo
+             if %errorlevel%==11 goto unifying
              if %errorlevel%==12 goto msupdate
              if %errorlevel%==13 goto vlc
              rem Adobe Acrobat Reader DC --------------------------------------------------
@@ -191,6 +191,12 @@ rem Term Agreement -----------------------------------------------------------
                  echo Task Completed.
                  pause > nul
                  goto msstore 
+             rem Dell Command Update ------------------------------------------------------
+                 :dellcu
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Dell.CommandUpdate.Universal
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore                 
              rem Dell Display & Peripheral Manager ----------------------------------------
                  :delldpm
                  "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install Dell.DisplayAndPeripheralManager
@@ -221,12 +227,6 @@ rem Term Agreement -----------------------------------------------------------
                  echo Task Completed.
                  pause > nul
                  goto msstore              
-             rem Minecraft Education ------------------------------------------------------
-                 :minecraftedu
-                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9NBLGGH4R2R6
-                 echo Task Completed.
-                 pause > nul
-                 goto msstore
              rem Update -------------------------------------------------------------------
                  :msupdate
                  "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" update --all --include-unknown --accept-source-agreements --accept-package-agreements
@@ -243,38 +243,44 @@ rem Term Agreement -----------------------------------------------------------
              :msstore2
              cls
              color 0f
-             powershell Write-Host ' Software Installs: (Page 2 of 2)' -ForegroundColor Blue
+             powershell Write-Host ' Software Installs: (Page 2 of 3)' -ForegroundColor Blue
              echo.
              powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
              echo.
              echo   [0] Back
-             echo   [1] Microsoft Company Portal App
-             echo   [2] Microsoft Office 365 Suit
-             echo   [3] Microsoft Outlook App
-             echo   [4] Microsoft PC Manager
-             echo   [5] Microsoft PowerToys
-             echo   [6] Microsoft Quick Assist
-             echo   [7] Microsoft Surface App
+             echo   [1] Minecraft Education
+             echo   [2] Microsoft Company Portal App
+             echo   [3] Microsoft Office 365 Suit
+             echo   [4] Microsoft Outlook App
+             echo   [5] Microsoft PC Manager
+             echo   [6] Microsoft PowerToys
+             echo   [7] Microsoft Quick Assist
+             echo   [8] Microsoft Surface App
              echo   [T] Microsoft Teams
-             echo   [8] Microsoft Wireless Display Adapter App
-             echo   [9] Microsoft Whiteboard App
+             echo   [9] Microsoft Wireless Display Adapter App
              echo   [P] Third Party Installs
              echo.
              choice /c 0AD1234567T89P /n /m ":~$"
              if %errorlevel%==1 goto selection
              if %errorlevel%==2 goto msstore
-             if %errorlevel%==3 goto msstore2
-             if %errorlevel%==4 goto mscp
-             if %errorlevel%==5 goto office365
-             if %errorlevel%==6 goto outlook
-             if %errorlevel%==7 goto pcmanager
-             if %errorlevel%==8 goto powertoys
-             if %errorlevel%==9 goto quickassist
-             if %errorlevel%==10 goto surface
-             if %errorlevel%==11 goto teams
-             if %errorlevel%==12 goto wd
-             if %errorlevel%==13 goto mswhiteboard
+             if %errorlevel%==3 goto msstore3
+             if %errorlevel%==4 goto minecraftedu 
+             if %errorlevel%==5 goto mscp
+             if %errorlevel%==6 goto office365
+             if %errorlevel%==7 goto outlook
+             if %errorlevel%==8 goto pcmanager
+             if %errorlevel%==9 goto powertoys
+             if %errorlevel%==10 goto quickassist
+             if %errorlevel%==11 goto surface
+             if %errorlevel%==12 goto teams
+             if %errorlevel%==13 goto wd
              if %errorlevel%==14 goto 3pi
+             rem Minecraft Education ------------------------------------------------------
+                 :minecraftedu
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9NBLGGH4R2R6
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore2
              rem Microsoft Company Portal App ---------------------------------------------
                  :mscp
                  "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJ3PZ
@@ -326,12 +332,6 @@ rem Term Agreement -----------------------------------------------------------
              rem Microsoft Wireless Display Adapter App -----------------------------------
                  :wd
                  "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9WZDNCRFJBB1
-                 echo Task Completed.
-                 pause > nul
-                 goto msstore2
-             rem Microsoft Whiteboard App -------------------------------------------------
-                 :mswhiteboard
-                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9MSPC6MP8FM4
                  echo Task Completed.
                  pause > nul
                  goto msstore2
@@ -392,6 +392,28 @@ rem Term Agreement -----------------------------------------------------------
                      echo Task Completed.
                      pause > nul
                      goto 3pi                 
+         rem MSstore3 -----------------------------------------------------------------
+             :msstore3
+             cls
+             color 0f
+             powershell Write-Host ' Software Installs: (Page 3 of 3)' -ForegroundColor Blue
+             echo.
+             powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
+             echo.
+             echo   [0] Back
+             echo   [1] Microsoft Whiteboard App
+             echo.
+             choice /c 0AD1 /n /m ":~$"
+             if %errorlevel%==1 goto selection
+             if %errorlevel%==2 goto msstore2
+             if %errorlevel%==3 goto msstore3
+             if %errorlevel%==4 goto mswhiteboard
+             rem Microsoft Whiteboard App -------------------------------------------------
+                 :mswhiteboard
+                 "%LOCALAPPDATA%\Microsoft\WindowsApps\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\winget.exe" install 9MSPC6MP8FM4
+                 echo Task Completed.
+                 pause > nul
+                 goto msstore3
      rem System Information -------------------------------------------------------
          :wininfo
          cls
@@ -417,8 +439,8 @@ rem Term Agreement -----------------------------------------------------------
              echo   [5] Network Reset - System Network Repair
              echo   [6] Perfomance Monitor Report
              echo   [7] Perfomance Monitor Resources
-             echo   [8] Rename - Rename The Computer System
-             echo   [9] System Clean - Deletes System Temporary Files         
+             echo   [8] Printer Server Properties
+             echo   [9] Rename - Rename The Computer System       
              echo.
              choice /c 0AD123456789E /n /m ":~$"
              if %errorlevel%==1 goto selection
@@ -431,26 +453,26 @@ rem Term Agreement -----------------------------------------------------------
              if %errorlevel%==8 goto commandnet
              if %errorlevel%==9 goto pmreport
              if %errorlevel%==10 goto pmres
-             if %errorlevel%==11 goto commandrename
-             if %errorlevel%==12 goto commandclean
+             if %errorlevel%==11 goto printui
+             if %errorlevel%==12 goto commandrename
              if %errorlevel%==13 goto medge
              rem Classic Device and Printers ----------------------------------------------
                  :mcdp
-                 C:\Windows\explorer.exe shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}
+                 "C:\Windows\explorer.exe" shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}
                  goto wincommand
              rem Bitlocker Info -----------------------------------------------------------
                  :commandbitlockercode
-                 %SystemRoot%\System32\manage-bde.exe -status
-                 %SystemRoot%\System32\manage-bde.exe -protectors C: -get
+                 "%SystemRoot%\System32\manage-bde.exe" -status
+                 "%SystemRoot%\System32\manage-bde.exe" -protectors C: -get
                  pause > nul
                  goto wincommand
              rem Delete Profiles ----------------------------------------------------------
                  :commandprofile
-                 %SystemRoot%\System32\SystemPropertiesAdvanced.exe
+                 "%SystemRoot%\System32\SystemPropertiesAdvanced.exe"
                  goto wincommand
              rem Device Manager -----------------------------------------------------------
                  :commanddevmgmt
-                 %SystemRoot%\System32\devmgmt.msc
+                 "%SystemRoot%\System32\devmgmt.msc"
                  goto wincommand
              rem Network Reset ------------------------------------------------------------
                  :commandnet
@@ -471,17 +493,51 @@ rem Term Agreement -----------------------------------------------------------
                  :pmres
                  powershell perfmon /res
                  goto wincommand
+             rem Printer Server -----------------------------------------------------------
+                 :printui
+                 powershell printui /s /t2
+                 goto wincommand
              rem Rename PC ----------------------------------------------------------------
                  :commandrename
                  hostname
                  echo.
                  set /p newname=Enter the new PC name: 
-                 %SystemRoot%\System32\WMIC.exe computersystem where name="%computername%" call rename name="%newname%"
+                 "%SystemRoot%\System32\WMIC.exe" computersystem where name="%computername%" call rename name="%newname%"
                  echo PC name has been changed to %newname%.
                  echo.
                  choice /c YN /n /m "Would you like to restart now (y/n)?:~$"
-                 if %errorlevel%==1 %SystemRoot%\System32\shutdown.exe /r /f /t 0
+                 if %errorlevel%==1 "%SystemRoot%\System32\shutdown.exe" /r /f /t 0
                  if %errorlevel%==2 goto wincommand
+             rem (Hidden) Microsoft Edge --------------------------------------------------
+                 :medge
+                 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+                 goto wincommand
+         rem Command Page 2 -----------------------------------------------------------
+                 :wincommand2
+                 cls
+                 color 0f
+                 powershell Write-Host ' Windows Command Menu is selected. (Page 2 of 2)' -ForegroundColor Blue
+                 echo.
+                 powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
+                 echo.
+                 echo   [0] Back
+                 echo   [1] System Clean - Deletes System Temporary Files  
+                 echo   [2] Time Sync - Sync System Clock
+                 echo   [3] Verbo - Enables System Messages During Boot
+                 echo   [4] Windows 11 Force Install
+                 echo   [5] Windows OS Repair - Restore and fixes Windows system files
+                 echo   [6] Windows Update Repair - Fixes issues with updating Windows       
+                 echo.
+                 choice /c 0AD123456 /n /m ":~$"
+                 if %errorlevel%==1 goto selection
+                 if %errorlevel%==2 goto wincommand
+                 if %errorlevel%==3 goto wincommand2
+                 if %errorlevel%==4 goto commandclean
+                 if %errorlevel%==5 goto commandtime
+                 if %errorlevel%==6 goto commandverbo
+                 if %errorlevel%==7 goto win11u
+                 if %errorlevel%==8 goto commandwinrepair
+                 if %errorlevel%==9 goto commandwinupdate
              rem System Clean -------------------------------------------------------------
                  :commandclean
                  echo Cleaning System...
@@ -510,46 +566,18 @@ rem Term Agreement -----------------------------------------------------------
                  timeout /t 3
                  echo Task Completed.
                  pause > nul
-                 goto wincommand
-             rem (Hidden) Microsoft Edge --------------------------------------------------
-                 :medge
-                 "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
-                 goto wincommand
-         rem Command Page 2 -----------------------------------------------------------
-                 :wincommand2
-                 cls
-                 color 0f
-                 powershell Write-Host ' Windows Command Menu is selected. (Page 2 of 2)' -ForegroundColor Blue
-                 echo.
-                 powershell Write-Host ' Use [A] and [D] to navigate the pages.' -ForegroundColor DarkGray
-                 echo.
-                 echo   [0] Back
-                 echo   [1] Time Sync - Sync System Clock
-                 echo   [2] Verbo - Enables System Messages During Boot
-                 echo   [3] Windows 11 Force Install
-                 echo   [4] Windows OS Repair - Restore and fixes Windows system files
-                 echo   [5] Windows Update Repair - Fixes issues with updating Windows       
-                 echo.
-                 choice /c 0AD12345 /n /m ":~$"
-                 if %errorlevel%==1 goto selection
-                 if %errorlevel%==2 goto wincommand
-                 if %errorlevel%==3 goto wincommand2
-                 if %errorlevel%==4 goto commandtime
-                 if %errorlevel%==5 goto commandverbo
-                 if %errorlevel%==6 goto win11u
-                 if %errorlevel%==7 goto commandwinrepair
-                 if %errorlevel%==8 goto commandwinupdate
-                 rem Time Sync ----------------------------------------------------------------
+                 goto wincommand2                 
+             rem Time Sync ----------------------------------------------------------------
                  :commandtime
-                 %SystemRoot%\System32\net.exe start w32time >nul 2>&1
+                 "%SystemRoot%\System32\net.exe" start w32time
                  timeout /t 10
-                 %SystemRoot%\System32\w32tm.exe /resync >nul 2>&1
+                 "%SystemRoot%\System32\w32tm.exe" /resync
                  echo Task Completed.
                  pause > nul
-                 goto wincommand22
+                 goto wincommand2
              rem Verbo --------------------------------------------------------------------
                  :commandverbo
-                 %SystemRoot%\System32\reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v verbosestatus /t REG_DWORD /d 1 /f >nul 2>&1
+                 "%SystemRoot%\System32\reg.exe" add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v verbosestatus /t REG_DWORD /d 1 /f >nul 2>&1
                  echo Task Completed.
                  pause > nul
                  goto wincommand2
@@ -562,39 +590,39 @@ rem Term Agreement -----------------------------------------------------------
                  goto wincommand2
              rem Windows OS Repair --------------------------------------------------------
                  :commandwinrepair
-                 %SystemRoot%\System32\chkdsk.exe /f
-                 %SystemRoot%\System32\DISM.exe /Online /Cleanup-Image /CheckHealth
-                 %SystemRoot%\System32\sfc.exe /scannow
-                 %SystemRoot%\System32\UsoClient.exe ScanInstallWait
+                 "%SystemRoot%\System32\chkdsk.exe" /f
+                 "%SystemRoot%\System32\DISM.exe" /Online /Cleanup-Image /CheckHealth
+                 "%SystemRoot%\System32\sfc.exe" /scannow
+                 "%SystemRoot%\System32\UsoClient.exe" ScanInstallWait
                  echo Task Completed.
                  pause > nul
                  goto wincommand2
              rem Windows Update Repair ----------------------------------------------------
                  :commandwinupdate
-                 %SystemRoot%\System32\sc.exe config trustedinstaller start=auto
-                 %SystemRoot%\System32\net.exe stop bits
-                 %SystemRoot%\System32\net.exe stop wuauserv
-                 %SystemRoot%\System32\net.exe stop msiserver
-                 %SystemRoot%\System32\net.exe stop cryptsvc
-                 %SystemRoot%\System32\net.exe stop appidsvcc
+                 "%SystemRoot%\System32\sc.exe" config trustedinstaller start=auto
+                 "%SystemRoot%\System32\net.exe" stop bits
+                 "%SystemRoot%\System32\net.exe" stop wuauserv
+                 "%SystemRoot%\System32\net.exe" stop msiserver
+                 "%SystemRoot%\System32\net.exe" stop cryptsvc
+                 "%SystemRoot%\System32\net.exe" stop appidsvcc
                  Ren %Systemroot%\SoftwareDistribution SoftwareDistribution.old
                  Ren %Systemroot%\System32\catroot2 catroot2.old
-                 %SystemRoot%\System32\regsvr32.exe /s atl.dll
-                 %SystemRoot%\System32\regsvr32.exe /s urlmon.dll
-                 %SystemRoot%\System32\regsvr32.exe /s mshtml.dll
-                 %SystemRoot%\System32\netsh.exe winsock reset
-                 %SystemRoot%\System32\netsh.exe winsock reset proxy
-                 %SystemRoot%\System32\rundll32.exe pnpclean.dll,RunDLL_PnpClean /DRIVERS /MAXCLEAN
-                 %SystemRoot%\System32\DISM.exe /Online /Cleanup-image /ScanHealth
-                 %SystemRoot%\System32\DISM.exe /Online /Cleanup-image /CheckHealth
-                 %SystemRoot%\System32\DISM.exe /Online /Cleanup-image /RestoreHealth
-                 %SystemRoot%\System32\DISM.exe /Online /Cleanup-image /StartComponentCleanup
-                 %SystemRoot%\System32\sfc.exe /scannow
-                 %SystemRoot%\System32\net.exe start bits
-                 %SystemRoot%\System32\net.exe start wuauserv
-                 %SystemRoot%\System32\net.exe start msiserver
-                 %SystemRoot%\System32\net.exe start cryptsvc
-                 %SystemRoot%\System32\net.exe start appidsvc
+                 "%SystemRoot%\System32\regsvr32.exe" /s atl.dll
+                 "%SystemRoot%\System32\regsvr32.exe" /s urlmon.dll
+                 "%SystemRoot%\System32\regsvr32.exe" /s mshtml.dll
+                 "%SystemRoot%\System32\netsh.exe" winsock reset
+                 "%SystemRoot%\System32\netsh.exe" winsock reset proxy
+                 "%SystemRoot%\System32\rundll32.exe" pnpclean.dll,RunDLL_PnpClean /DRIVERS /MAXCLEAN
+                 "%SystemRoot%\System32\DISM.exe" /Online /Cleanup-image /ScanHealth
+                 "%SystemRoot%\System32\DISM.exe" /Online /Cleanup-image /CheckHealth
+                 "%SystemRoot%\System32\DISM.exe" /Online /Cleanup-image /RestoreHealth
+                 "%SystemRoot%\System32\DISM.exe" /Online /Cleanup-image /StartComponentCleanup
+                 "%SystemRoot%\System32\sfc.exe" /scannow
+                 "%SystemRoot%\System32\net.exe" start bits
+                 "%SystemRoot%\System32\net.exe" start wuauserv
+                 "%SystemRoot%\System32\net.exe" start msiserver
+                 "%SystemRoot%\System32\net.exe" start cryptsvc
+                 "%SystemRoot%\System32\net.exe" start appidsvc
                  echo Task Completed.
                  pause > nul
                  goto wincommand2
@@ -619,8 +647,8 @@ rem Term Agreement -----------------------------------------------------------
              set "ENV_FILE=%~dp0.env"
              set "MODEL=gpt-5.6-luna"
              set "API_URL=https://api.openai.com/v1/responses"
-             set "RESPONSE_FILE=%TEMP%\AskAI_%RANDOM%_%RANDOM%.response.json"
-             set "REQUEST_FILE=%TEMP%\AskAI_%RANDOM%_%RANDOM%.request.json"
+             set "RESPONSE_FILE=%TEMP%\OpenAI_%RANDOM%_%RANDOM%.response.json"
+             set "REQUEST_FILE=%TEMP%\OpenAI_%RANDOM%_%RANDOM%.request.json"
              echo.
              echo  ================================================================
              echo                             ChatGPT
@@ -635,7 +663,7 @@ rem Term Agreement -----------------------------------------------------------
              if errorlevel 1 (
              powershell Write-Host ' [ERROR] curl.exe was not found.' -ForegroundColor red
              echo.
-             echo  AskAI requires Windows 10 or Windows 11 with curl available.
+             echo  OpenAI requires Windows 10 or Windows 11 with curl available.
              echo.
              pause > nul
              goto other
@@ -767,7 +795,7 @@ rem Term Agreement -----------------------------------------------------------
                  echo.
                  echo    /help       Show this help
                  echo    /clear      Clear the terminal
-                 echo    /exit       Close AskAI
+                 echo    /exit       Close OpenAI
                  echo.
                  echo  Type any normal question after ":~$".
                  echo.
